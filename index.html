@@ -162,27 +162,54 @@ a{color:inherit}
 .mq span::after{content:"✦";font-size:.6em}
 @keyframes mq{to{transform:translateX(-50%)}}
 
-/* scroll story */
-.story{position:relative;height:420vh}
-.story .pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:clamp(24px,5vw,80px);padding:90px var(--gut) 40px}
-.story .bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(55% 60% at 70% 50%,color-mix(in srgb,var(--sc,#2E2B6B) 55%,transparent),transparent 70%);transition:background 1s}
-.story .copy{position:relative;min-height:420px}
-.story .num{font-family:var(--disp);font-size:20px;letter-spacing:.1em;color:var(--mut)}
-.story .num b{color:var(--txt);font-weight:400}
-.story .st{position:absolute;left:0;right:0;top:40px;opacity:0;transform:translateY(40px);transition:opacity .6s,transform .8s var(--ease);pointer-events:none}
-.story .st.on{opacity:1;transform:none;pointer-events:auto}
-.story .st h2{font-family:var(--disp);font-weight:400;font-size:clamp(70px,10vw,150px);line-height:.85;text-transform:uppercase}
-.story .st h2 em{font-style:normal;color:var(--sc2,var(--acc))}
-.story .st p{margin-top:18px;font-size:clamp(16px,1.4vw,20px);color:#C9C9D2;max-width:34ch}
-.story .st p b{color:var(--txt)}
-.story .bar{position:absolute;left:0;right:0;bottom:0;display:flex;gap:8px}
-.story .bar span{flex:1;max-width:70px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);overflow:hidden}
-.story .bar span i{display:block;height:100%;width:0;background:var(--txt)}
-.story .frames{position:relative;height:min(74svh,700px);border-radius:32px;overflow:hidden;background:#111;box-shadow:0 50px 100px -40px rgba(0,0,0,.9),inset 0 0 0 1px var(--line)}
-.story .fr{position:absolute;inset:0;opacity:0;transform:scale(1.12);transition:opacity 1s var(--ease),transform 1.6s var(--ease)}
-.story .fr.on{opacity:1;transform:scale(1)}
-.story .fr img{width:100%;height:100%;object-fit:cover}
-.story .fr figcaption{position:absolute;left:16px;bottom:16px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:13px;font-weight:700}
+/* Acup lineup: 5 lines from 10 g to 40 g (free scroll, swipe on phone) */
+.lines{position:relative;overflow:hidden}
+.lines::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(50% 60% at 85% 20%,rgba(46,196,198,.12),transparent 70%),radial-gradient(40% 50% at 0% 90%,rgba(229,38,44,.10),transparent 70%)}
+.ltrack{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.lc{position:relative;display:flex;flex-direction:column;border-radius:28px;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 22%,#141418),#141418 62%);box-shadow:inset 0 0 0 1px var(--line);padding:18px 18px 20px;overflow:hidden;transition:opacity 1s,transform .6s var(--ease),box-shadow .4s}
+.lc:hover{transform:translateY(-6px);box-shadow:inset 0 0 0 1px var(--c),0 30px 60px -30px var(--c)}
+.lc .stack{position:relative;height:150px;margin:4px 0 14px}
+.lc .stack img{position:absolute;top:8px;left:50%;width:118px;margin-left:-59px;filter:drop-shadow(0 14px 18px rgba(0,0,0,.55));transition:transform .7s var(--spring);transform:translateX(calc(var(--k)*34px)) rotate(calc(var(--k)*14deg)) scale(calc(1 - var(--a)*.12))}
+.lc:hover .stack img{transform:translateX(calc(var(--k)*50px)) translateY(calc(var(--a)*6px)) rotate(calc(var(--k)*22deg)) scale(calc(1 - var(--a)*.12))}
+.lc .pg{display:flex;align-items:baseline;gap:6px;line-height:.85}
+.lc .pg b{font-family:var(--disp);font-weight:400;font-size:clamp(64px,6vw,92px);color:var(--c)}
+.lc .pg small{font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.lc .meter{height:6px;border-radius:3px;background:rgba(255,255,255,.08);margin:12px 0 14px;overflow:hidden}
+.lc .meter i{display:block;height:100%;width:0;border-radius:3px;background:var(--c);transition:width 1.4s var(--ease) .2s}
+.lc.in .meter i{width:var(--w)}
+.lc h3{font-weight:900;font-style:italic;font-size:24px;line-height:1.05}
+.lc .sub{font-size:13px;color:var(--mut);margin-top:4px}
+.lc ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px}
+.lc li{font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.06)}
+.lc .see{margin-top:auto;height:46px;border-radius:999px;background:var(--c);color:var(--ci);font-weight:900;font-style:italic;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .3s var(--spring)}
+.lc .see:hover{transform:scale(1.04)}
+.lc .see svg{width:18px;height:18px}
+.lnote{margin-top:16px;font-size:13px;color:var(--mut)}
+@media (max-width:1180px){
+  .ltrack{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 calc(var(--gut)*-1);padding:6px var(--gut) 10px;scroll-padding-inline:var(--gut)}
+  .ltrack::-webkit-scrollbar{display:none}
+  .lc{flex:0 0 min(78vw,300px);scroll-snap-align:start}
+}
+/* mobile menu */
+.mbtn{display:none;width:44px;height:44px;border-radius:50%;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);place-items:center}
+.mbtn span{position:relative;display:block;width:18px;height:2px;background:var(--txt);border-radius:1px;transition:background .2s}
+.mbtn span::before,.mbtn span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:var(--txt);border-radius:1px;transition:transform .35s var(--ease)}
+.mbtn span::before{top:-6px}.mbtn span::after{top:6px}
+.menu-on .mbtn span{background:transparent}
+.menu-on .mbtn span::before{transform:translateY(6px) rotate(45deg)}
+.menu-on .mbtn span::after{transform:translateY(-6px) rotate(-45deg)}
+.mnav{position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;justify-content:center;padding:100px var(--gut) max(30px,env(safe-area-inset-bottom));background:rgba(8,8,10,.96);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);clip-path:circle(0 at calc(100% - 40px) 40px);visibility:hidden;transition:clip-path .7s var(--ease),visibility 0s linear .7s}
+.menu-on .mnav{clip-path:circle(150% at calc(100% - 40px) 40px);visibility:visible;transition:clip-path .7s var(--ease)}
+.mnav a.l{display:flex;align-items:baseline;gap:14px;font-family:var(--disp);font-size:clamp(48px,13vw,84px);line-height:1.02;text-transform:uppercase;text-decoration:none;opacity:0;transform:translateY(30px);transition:opacity .4s,transform .6s var(--ease),color .2s}
+.mnav a.l small{font-family:var(--sport);font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--mut)}
+.mnav a.l:active,.mnav a.l:hover{color:var(--acc)}
+.menu-on .mnav a.l{opacity:1;transform:none;transition-delay:calc(var(--i)*.06s + .15s)}
+.mnav .mfoot{display:flex;gap:10px;margin-top:34px;opacity:0;transition:opacity .4s}
+.menu-on .mnav .mfoot{opacity:1;transition-delay:.5s}
+.mnav .mfoot a{flex:1;height:50px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-style:italic;text-decoration:none;box-shadow:inset 0 0 0 1px var(--line)}
+.mnav .mfoot a.wa{background:#25D366;color:#06210F;box-shadow:none}
+.mnav .mfoot svg{width:18px;height:18px}
+body.menu-on{overflow:hidden}
 
 /* shop */
 .sec{padding:clamp(90px,12vw,160px) 0}
@@ -297,8 +324,9 @@ a{color:inherit}
 .foot small.d{font-size:12px;color:var(--mut);max-width:60ch}
 
 /* order bar, panels */
-.obar{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));z-index:70;transform:translate(-50%,170%);display:flex;align-items:center;gap:14px;padding:8px 8px 8px 20px;border-radius:999px;background:var(--txt);color:var(--bg);box-shadow:0 20px 50px -14px rgba(0,0,0,.8);transition:transform .6s var(--spring);max-width:calc(100% - 24px)}
-.obar.on{transform:translate(-50%,0)}
+.obar{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));z-index:70;transform:translate(-50%,170%);display:flex;align-items:center;gap:14px;padding:8px 8px 8px 20px;border-radius:999px;background:var(--txt);color:var(--bg);box-shadow:0 20px 50px -14px rgba(0,0,0,.8);transition:transform .6s var(--spring),opacity .3s,visibility 0s linear .6s;max-width:calc(100% - 24px)}
+.obar{visibility:hidden;opacity:0}
+.obar.on{transform:translate(-50%,0);visibility:visible;opacity:1;transition:transform .6s var(--spring),opacity .3s}
 .obar .t{font-size:14px;white-space:nowrap;font-weight:600}
 .obar .t b{font-family:var(--disp);font-weight:400;font-size:20px}
 .obar .go{height:46px;padding:0 20px;border-radius:999px;background:var(--acc);color:var(--accInk);font-weight:900;font-style:italic;letter-spacing:.04em;white-space:nowrap;transition:background .6s,color .6s}
@@ -363,12 +391,17 @@ a{color:inherit}
 
 @media (max-width:1000px){
   .hd nav{display:none}
+  .cbtn{margin-left:auto}
+  .mbtn{display:grid}
+  .ht .kick{font-size:11px;letter-spacing:.14em}
+  .ht .kick::before{width:22px}
+  .bigword{left:50%;right:auto;transform:translate(-50%,-50%)}
   .hero{grid-template-columns:1fr;align-content:start;padding-top:calc(min(46svh,440px) + 70px);padding-bottom:180px}
   #stage3d{inset:62px 0 auto 0;height:min(46svh,440px)}
   .hero::after{display:none}
   .hero h1{font-size:clamp(56px,15vw,96px)}
   .now,.drag{display:none}
-  .bigword{top:28%;font-size:40vw}
+  .bigword{top:28%;font-size:34vw}
   .switch{grid-template-columns:repeat(2,minmax(0,1fr));bottom:20px}
   .bs{height:58px}
   .mix .wrap,.ws{grid-template-columns:1fr}
@@ -389,11 +422,6 @@ a{color:inherit}
   .slots{gap:6px}.slot{border-radius:12px}
   .two{grid-template-columns:1fr}
   .cbtn span{display:none}
-  .story .pin{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-content:start;padding-top:76px;gap:14px}
-  .story .frames{order:-1;height:46svh;border-radius:24px}
-  .story .copy{min-height:290px}
-  .story .st{top:30px}
-  .story .st h2{font-size:clamp(56px,17vw,84px)}
 }
 @media (max-width:380px){.grid{grid-template-columns:1fr}.switch{gap:6px}.bs{padding:0 10px}.bs b{font-size:17px}}
 @media (prefers-reduced-motion:reduce){
@@ -408,9 +436,18 @@ a{color:inherit}
 
 <header class="hd" id="hd">
   <a class="wm" href="#top" aria-label="Abrands home">ABRANDS<small>BOOST • GAIN • RECOVER</small></a>
-  <nav aria-label="Main"><a href="#shop">Shop</a><a href="#story">Acup</a><a href="#mix">Mix box</a><a href="#ship">Delivery</a><a href="#wholesale">Wholesale</a></nav>
+  <nav aria-label="Main"><a href="#shop">Shop</a><a href="#story">Acup lines</a><a href="#mix">Mix box</a><a href="#ship">Delivery</a><a href="#wholesale">Wholesale</a></nav>
   <button class="cbtn" id="cartBtn" type="button" aria-label="Open your order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 8h16l-1.5 11.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg><span>ORDER</span><b id="cnt">0</b></button>
+  <button class="mbtn" id="mbtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mnav"><span></span></button>
 </header>
+<nav class="mnav" id="mnav" aria-label="Menu">
+  <a class="l" href="#shop" style="--i:0">Shop <small>25 products</small></a>
+  <a class="l" href="#story" style="--i:1">Acup lines <small>10–40 g</small></a>
+  <a class="l" href="#mix" style="--i:2">Mix box <small>−10%</small></a>
+  <a class="l" href="#ship" style="--i:3">Delivery</a>
+  <a class="l" href="#wholesale" style="--i:4">Wholesale</a>
+  <div class="mfoot"><a class="wa" id="mWa" href="#" target="_blank" rel="noopener">WhatsApp</a><a id="mIg" href="#" target="_blank" rel="noopener">Instagram</a></div>
+</nav>
 
 <main id="top">
 <section class="hero" aria-label="Abrands">
@@ -431,23 +468,12 @@ a{color:inherit}
 
 <div class="mqw" aria-hidden="true"><div class="mq"><div class="tr" id="mq"></div></div></div>
 
-<section class="story" id="story" aria-label="Grab it, open it, enjoy it, repeat">
-  <div class="pin">
-    <div class="bg" id="storyBg"></div>
-    <div class="copy">
-      <p class="num"><b id="sNum">01</b> / 04 · the Acup ritual</p>
-      <div class="st" data-s="0"><h2>Grab <em>it.</em></h2><p><b>Toss one in your gym bag.</b> 25 to 40 g of protein in a cup that fits in your hand. The spoon is already inside.</p></div>
-      <div class="st" data-s="1"><h2>Open <em>it.</em></h2><p><b>Peel the lid, that's it.</b> No shaker, no water, no mess. Ready in one second, anywhere.</p></div>
-      <div class="st" data-s="2"><h2>Enjoy <em>it.</em></h2><p><b>Thick protein cream on a crunchy base.</b> Tastes like dessert, works like a shake.</p></div>
-      <div class="st" data-s="3"><h2>Re<em>peat.</em></h2><p><b>18 flavors, 5 lines</b>: Junior 10 g, Super Charge 15 g, Booster &amp; Oriental 25 g, Protein Bomb 40 g. Pick your hit.</p></div>
-      <div class="bar" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
-    </div>
-    <div class="frames" aria-hidden="true">
-      <figure class="fr" data-f="0"><img src="assets/img/bg-man.webp" alt=""><figcaption>Protein Bomb · Mango Passion</figcaption></figure>
-      <figure class="fr" data-f="1"><img src="assets/img/ph-trio.webp" alt=""><figcaption>Protein Bomb · Trio, 40 g</figcaption></figure>
-      <figure class="fr" data-f="2"><img src="assets/img/ph-cups.webp" alt=""><figcaption>Real cups, real cream</figcaption></figure>
-      <figure class="fr" data-f="3"><img src="assets/img/bg-cols.webp" alt=""><figcaption>Mango · Honey · Crispy · Birthday Cake</figcaption></figure>
-    </div>
+<section class="sec lines" id="story" aria-labelledby="lnH">
+  <div class="wrap">
+    <div class="head reveal"><div><p class="kick">The Acup lineup</p><h2 class="h2" id="lnH">Find your <i>level.</i></h2></div>
+      <p>Five lines, 18 flavors. Same thick protein cream on a crunchy base, spoon inside. Just choose how much protein you need.</p></div>
+    <div class="ltrack" id="ltrack"></div>
+    <p class="lnote">Protein per cup, from the printed labels.</p>
   </div>
 </section>
 

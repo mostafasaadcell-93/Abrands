@@ -1,4 +1,4 @@
-/* Abrands: brand switcher, shop + protein finder, mix box, Acup scroll story, countries, cart → WhatsApp.
+/* Abrands: brand switcher, shop + protein finder, mix box, Acup lineup, mobile menu, countries, cart → WhatsApp.
    Data: data.js (window.AB). 3D: scene.js (window.ABScene). */
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
@@ -104,22 +104,45 @@ filter();
 if (!reduce) $('#grid').addEventListener('pointermove', e => { if (e.pointerType !== 'mouse') return; const c = e.target.closest('.pc'); if (!c) return; const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.style.transform = `perspective(900px) rotateY(${x * 12}deg) rotateX(${-y * 10}deg) translateY(-4px)`; });
 $('#grid').addEventListener('pointerout', e => { const c = e.target.closest('.pc'); if (c && !c.contains(e.relatedTarget)) c.style.transform = ''; });
 
-/* ================= SCROLL STORY (Acup ritual, real photos) ================= */
-const story = $('#story'), steps = $$('.story .st'), frames = $$('.story .fr'), bars = $$('.story .bar i');
-const STORY_C = ['#F08A1C', '#2E2B6B', '#B99B6C', '#E8467A'];
-let lastStep = -1;
-function storyTick() {
-  const r = story.getBoundingClientRect(), span = r.height - innerHeight; if (r.bottom < 0 || r.top > innerHeight) return;
-  const p = Math.max(0, Math.min(.9999, -r.top / span)), step = Math.floor(p * 4), local = p * 4 - step;
-  bars.forEach((b, i) => b.style.width = (i < step ? 100 : i === step ? local * 100 : 0) + '%');
-  if (step !== lastStep) {
-    lastStep = step;
-    steps.forEach((s, i) => s.classList.toggle('on', i === step)); frames.forEach((f, i) => f.classList.toggle('on', i === step));
-    $('#sNum').textContent = '0' + (step + 1); story.style.setProperty('--sc', STORY_C[step]);
-  }
-  const img = frames[step].querySelector('img'); if (!reduce) img.style.transform = `translateY(${(local - .5) * -4}%) scale(1.06)`;
+/* ================= ACUP LINEUP (5 lines, free scroll) ================= */
+const LINES = [
+  { line: 'Junior', c: '#9DB6E6', say: 'Junior size, 60 g cup' },
+  { line: 'Super Charge', c: '#3CC4C9', say: 'The lighter cup, 66 g' },
+  { line: 'Booster', c: '#F08A1C', say: 'The everyday cup, 80 g' },
+  { line: 'Oriental', c: '#1E9C86', say: 'Oriental sweets, 80 g cup' },
+  { line: 'Protein Bomb', c: '#7B6CF6', say: 'The big one, 125 g cup' },
+];
+const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+$('#ltrack').innerHTML = LINES.map(L => {
+  const ps = AB.products.filter(p => p.brand === 'acup' && p.line === L.line); if (!ps.length) return '';
+  const g = ps[0].p, kc = ps.find(p => p.kcal), pick = ps.slice(0, 3), mid = (pick.length - 1) / 2;
+  return `<article class="lc reveal" style="--c:${L.c};--ci:${inkOf(L.c)}">
+    <div class="stack" aria-hidden="true">${pick.map((p, i) => `<img src="${img(p)}" alt="" loading="lazy" style="--k:${i - mid};--a:${Math.abs(i - mid)};z-index:${10 - Math.abs(i - mid) * 2}">`).join('')}</div>
+    <div class="pg"><b>${g}</b><small>g protein</small></div>
+    <div class="meter" aria-hidden="true"><i style="--w:${Math.round(g / 40 * 100)}%"></i></div>
+    <h3>${esc(L.line)}</h3><p class="sub">${esc(L.say)}${kc ? ` · ${kc.kcal} kcal` : ''}</p>
+    <ul>${ps.map(p => `<li>${esc(p.name)}</li>`).join('')}</ul>
+    <button class="see" type="button" data-line="${esc(L.line)}">See ${ps.length} flavor${ps.length > 1 ? 's' : ''} ${ARROW}</button></article>`;
+}).join('');
+$('#ltrack').onclick = e => {
+  const b = e.target.closest('[data-line]'); if (!b) return;
+  const ids = AB.products.filter(p => p.brand === 'acup' && p.line === b.dataset.line).map(p => p.id);
+  $('#filters [data-fb="acup"]').click();
+  const first = $('#pc-' + ids[0]); first.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  setTimeout(() => ids.forEach(id => { const c = $('#pc-' + id); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }), 650);
+};
+
+/* ================= MOBILE MENU ================= */
+const mWaUrl = `https://wa.me/${CONTACT || '9617189537'}`;
+$('#mWa').href = mWaUrl; $('#mIg').href = AB.instagram;
+function menu(on) {
+  document.body.classList.toggle('menu-on', on); $('#mbtn').setAttribute('aria-expanded', on);
+  $('#mbtn').setAttribute('aria-label', on ? 'Close menu' : 'Menu');
 }
-story.style.setProperty('--sc', STORY_C[0]);
+$('#mbtn').onclick = () => menu(!document.body.classList.contains('menu-on'));
+$('#mnav').addEventListener('click', e => { if (e.target.closest('a')) menu(false); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && document.body.classList.contains('menu-on')) menu(false); });
+matchMedia('(min-width:1001px)').addEventListener('change', e => { if (e.matches) menu(false); });
 
 /* ================= MIX BOX ================= */
 let mix = [];
@@ -276,7 +299,7 @@ $('#wsForm').onsubmit = e => {
 $('#ig').href = AB.instagram; $('#waF').href = `https://wa.me/${CONTACT || '9617189537'}`;
 const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
 $$('.reveal').forEach(el => rio.observe(el));
-addEventListener('scroll', () => { $('#hd').classList.toggle('solid', scrollY > 30); storyTick(); }, { passive: true });
+addEventListener('scroll', () => { $('#hd').classList.toggle('solid', scrollY > 30); }, { passive: true });
 (function intro() {
   const el = $('#intro'); let seen = false, done = false;
   try { seen = sessionStorage.getItem('ab-intro') === '1'; sessionStorage.setItem('ab-intro', '1'); } catch (e) {}
@@ -293,4 +316,4 @@ addEventListener('scroll', () => { $('#hd').classList.toggle('solid', scrollY > 
   addEventListener('keydown', finish, { once: true });
   setTimeout(finish, 6000);   // safety net
 })();
-counts(); storyTick();
+counts();
