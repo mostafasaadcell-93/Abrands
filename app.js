@@ -26,7 +26,7 @@ function accent(hex) {
 }
 
 /* ================= HERO: brand switcher + 3D ================= */
-const HERO_PICK = { acup: 'acup-coffee', abar: 'abar-dark', abites: 'abites-choco', abutter: 'abutter-pb' };
+const HERO_PICK = { acup: 'acup-trio', abar: 'abar-dark', abites: 'abites-choco', abutter: 'abutter-pb' };
 $('#switch').innerHTML = AB.brands.map(b => `<button class="bs" type="button" data-b="${b.id}" style="--c:${b.color}" aria-pressed="false"><i></i><span><b>${esc(b.name)}</b><small>${esc(b.kind)}</small></span><span class="prog"></span></button>`).join('');
 let heroProduct = PR[HERO_PICK.acup];
 function showBrand(id, user) {
@@ -36,10 +36,9 @@ function showBrand(id, user) {
   $('#bigword').textContent = b.name.toUpperCase();
   const [v, u] = stat(p);
   $('#now').innerHTML = `<span class="k">${esc(b.kind)}</span><h3>${esc(b.name)} · ${esc(p.name)}</h3><p>${esc(b.pitch)}</p><div class="st"><b>${v}</b><span>${u}</span></div>`;
-  if (window.ABScene) window.ABScene.show(id, { ...p, cream: CREAM[p.id] }, b.color);
+  if (window.ABScene) window.ABScene.show(id, p, b.color);
   if (user) { userPicked = true; document.body.classList.add('paused'); }
 }
-const CREAM = { 'acup-coffee': '#C9A57B', 'acup-kunafa': '#EDDDB8', 'acup-dubai': '#B7C98A' };
 $('#switch').addEventListener('click', e => { const b = e.target.closest('[data-b]'); if (b) showBrand(b.dataset.b, true); });
 let userPicked = false, heroVis = true;
 new IntersectionObserver(es => { heroVis = es[0].isIntersecting; }).observe($('.hero'));
@@ -79,7 +78,7 @@ function card(p) {
     <div class="ph"><img src="${img(p)}" alt="${esc(b.name)} ${esc(p.name)}" loading="lazy" width="480" height="480"><button type="button" data-open="${p.id}" aria-label="${esc(p.name)} details"></button>
       <div class="badge" aria-hidden="true"><b>${v}</b><small>${u.toUpperCase().replace('G ', '')}</small></div><span class="brand">${esc(b.name)}</span></div>
     <div class="bd"><span class="ln">${esc(p.line)}</span><h3>${esc(p.name)}</h3>
-      <div class="ft"><span class="pr">${money(p.price)}<small>${p.unit ? '/ ' + esc(p.unit) : ''}</small></span><div data-ctl="${p.id}"></div></div></div></article>`;
+      <div class="ft"><span class="pr">${money(p.price)}<small>${p.unit ? '/ ' + esc(p.unit) : p.size ? esc(p.size) : ''}</small></span><div data-ctl="${p.id}"></div></div></div></article>`;
 }
 $('#grid').innerHTML = AB.products.map(card).join('');
 function renderCtl(id) {
@@ -104,27 +103,22 @@ filter();
 if (!reduce) $('#grid').addEventListener('pointermove', e => { if (e.pointerType !== 'mouse') return; const c = e.target.closest('.pc'); if (!c) return; const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.style.transform = `perspective(900px) rotateY(${x * 12}deg) rotateX(${-y * 10}deg) translateY(-4px)`; });
 $('#grid').addEventListener('pointerout', e => { const c = e.target.closest('.pc'); if (c && !c.contains(e.relatedTarget)) c.style.transform = ''; });
 
-/* ================= SCROLL STORY (Acup) ================= */
-const story = $('#story'), words = $$('.story .w'), bars = $$('.story .steps i');
+/* ================= SCROLL STORY (Acup ritual, real photos) ================= */
+const story = $('#story'), steps = $$('.story .st'), frames = $$('.story .fr'), bars = $$('.story .bar i');
+const STORY_C = ['#F08A1C', '#2E2B6B', '#B99B6C', '#E8467A'];
+let lastStep = -1;
 function storyTick() {
   const r = story.getBoundingClientRect(), span = r.height - innerHeight; if (r.bottom < 0 || r.top > innerHeight) return;
-  const p = Math.max(0, Math.min(1, -r.top / span)), step = Math.min(3, Math.floor(p * 4)), local = p * 4 - step;
-  words.forEach((w, i) => { w.classList.toggle('on', i === step); w.classList.toggle('past', i < step); });
+  const p = Math.max(0, Math.min(.9999, -r.top / span)), step = Math.floor(p * 4), local = p * 4 - step;
   bars.forEach((b, i) => b.style.width = (i < step ? 100 : i === step ? local * 100 : 0) + '%');
-  // Grab it: cup pops in · Open it: lid lifts and turns to face you · Enjoy it: spoon dives in · Repeat: lid seals again
-  const e = x => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);
-  const open = step === 0 ? 0 : step === 1 ? e(local * 1.15) : step === 2 ? 1 : 1 - e(local * 1.3);
-  $('#storyLid').style.transform = `translateY(${-open * 62}%) translateX(${open * 6}%) rotateX(${72 - open * 72}deg) rotateZ(${open * -8}deg) scale(${1 - open * .12})`;
-  $('#spoon').classList.toggle('on', step === 2 || (step === 3 && local < .35));
-  const pop = step === 0 ? .82 + e(local * 1.4) * .18 : 1;
-  $('.cupwrap').style.transform = `scale(${pop}) rotate(${step === 3 ? Math.sin(local * Math.PI) * -4 : 0}deg)`;
-  if (window.ABScene && brand === 'acup') window.ABScene.peel(0);
+  if (step !== lastStep) {
+    lastStep = step;
+    steps.forEach((s, i) => s.classList.toggle('on', i === step)); frames.forEach((f, i) => f.classList.toggle('on', i === step));
+    $('#sNum').textContent = '0' + (step + 1); story.style.setProperty('--sc', STORY_C[step]);
+  }
+  const img = frames[step].querySelector('img'); if (!reduce) img.style.transform = `translateY(${(local - .5) * -4}%) scale(1.06)`;
 }
-$$('.story .flv button').forEach(b => b.onclick = () => {
-  $$('.story .flv button').forEach(x => x.setAttribute('aria-pressed', x === b));
-  $('#storyLidImg').src = `assets/img/${b.dataset.lid}.png`; story.style.setProperty('--sc', b.dataset.c);
-});
-story.style.setProperty('--sc', '#F08A1C');
+story.style.setProperty('--sc', STORY_C[0]);
 
 /* ================= MIX BOX ================= */
 let mix = [];
@@ -150,8 +144,12 @@ $('#mixAdd').onclick = () => { if (mix.length !== AB.box.size) return; const r =
 
 /* ================= COUNTRIES ================= */
 let country = 'lb'; try { country = localStorage.getItem('abrands-country') || 'lb'; } catch (e) {}
-$('#cty').innerHTML = AB.countries.map(c => `<button type="button" class="ct" data-ct="${c.id}" aria-pressed="${c.id === country}"><span class="f">${c.flag}</span><b>${esc(c.name)}</b><small>${esc(c.note)}</small></button>`).join('');
-$('#cty').onclick = e => { const b = e.target.closest('[data-ct]'); if (!b) return; country = b.dataset.ct; try { localStorage.setItem('abrands-country', country); } catch (er) {} $$('#cty .ct').forEach(x => x.setAttribute('aria-pressed', x.dataset.ct === country)); toast(`Delivering to ${AB.countries.find(c => c.id === country).name}`); };
+const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.4.1.1.1.8-.1 1.4z"/></svg>';
+const waText = c => `https://wa.me/${CONTACT}?text=${encodeURIComponent(`Hi Abrands! I'm in ${c.name} and I'd like to order. Do you deliver to my area?`)}`;
+$('#cty').innerHTML = AB.countries.map(c => `<div class="ct" role="button" tabindex="0" data-ct="${c.id}" aria-pressed="${c.id === country}"><span class="f">${c.flag}</span><b>${esc(c.name)}</b><small>${esc(c.id === 'lb' ? 'Delivery all over Lebanon. Order on the site or on WhatsApp.' : 'Message us for delivery and prices to ' + c.name + '.')}</small>
+  <a class="wa" href="${waText(c)}" target="_blank" rel="noopener">${WA_ICON}WhatsApp</a>${c.id === 'lb' ? '<a class="go" href="#shop">Shop</a>' : ''}</div>`).join('');
+$('#cty').onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.ct')) { e.preventDefault(); e.target.click(); } };
+$('#cty').onclick = e => { if (e.target.closest('a')) return; const b = e.target.closest('[data-ct]'); if (!b) return; country = b.dataset.ct; try { localStorage.setItem('abrands-country', country); } catch (er) {} $$('#cty .ct').forEach(x => x.setAttribute('aria-pressed', x.dataset.ct === country)); toast(`Delivering to ${AB.countries.find(c => c.id === country).name}`); };
 $('#wsC').innerHTML = AB.countries.map(c => `<option value="${c.id}">${c.flag} ${esc(c.name)}</option>`).join('');
 
 /* ================= SHEET ================= */

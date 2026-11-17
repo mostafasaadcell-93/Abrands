@@ -11,13 +11,14 @@ Plain HTML/CSS/JS, no build step. Three.js and the fonts are bundled in `assets/
 | File | What it does |
 |---|---|
 | `index.html` | Page and all styles (dark, sporty; each brand recolors the whole page) |
-| `scene.js` | 3D turntable: Acup cup with its real printed lid, Abar bar with its real wrapper, Abites box, Abutter jar. Drag to spin. |
-| `app.js` | Brand switcher, shop + protein finder, Acup scroll story (Grab it · Open it · Enjoy it · Repeat), mix box (any 10 products, −10%), countries, cart → WhatsApp, wholesale form |
+| `scene.js` | 3D product studio with real soft shadows: Acup tub (clear plastic, cream + crumble, foil + printed lid), Abar pillow bar with its real wrapper, Abites carton, Abutter jar. Drag to spin. |
+| `app.js` | Brand switcher, shop + protein finder, Acup scroll story with real photos (Grab it · Open it · Enjoy it · Repeat), country cards with WhatsApp buttons, mix box (any 10 products, −10%), countries, cart → WhatsApp, wholesale form |
 | `data.js` | Brands, products, prices, countries, box deal. **Edit prices here** (between the AB-CONFIG markers). |
 | `assets/img` | Product art cut from Abrands' Instagram posts (replace with the original files for sharper images) |
 
 ## Before launch (confirm with Abrands)
 
+- **Invasion photo**: the card uses a placeholder until we get the real product photo.
 - **Real prices** for every product (all prices now are placeholders; Carrefour lists Acup Kunafa 80 g at 286,670 LL ≈ $3.20).
 - The full flavor list (Carrefour also lists Vanilla & Dates, Red Berries, Invasion, Vanilla Marvel).
 - Protein per Abar bar (pack says 33%) and the Abutter jar size.
