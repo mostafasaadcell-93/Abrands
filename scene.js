@@ -95,7 +95,7 @@ const plastic = () => new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughnes
   const cream = layer(.31, H - .03, creamMat, 0);
   // foil seal + printed lid (overhangs the flange) + pull tab
   const foilMat = new THREE.MeshStandardMaterial({ color: 0xd7dade, metalness: .9, roughness: .28 });
-  const lidMat = new THREE.MeshStandardMaterial({ map: tex('lid-trio', 'png'), roughness: .45, metalness: .15 });
+  const lidMat = new THREE.MeshStandardMaterial({ map: tex('lid-trio'), roughness: .45, metalness: .15 });
   const lidR = R1 + .12;
   const lid = new THREE.Mesh(new THREE.CylinderGeometry(lidR, lidR, .018, 128), [foilMat, lidMat, foilMat]);
   lid.position.y = H + .065; lid.rotation.y = Math.PI / 2 - .35; g.add(lid);
@@ -206,7 +206,7 @@ let cur = null, next = null, swap = 0, spinBoost = 0;
 const accent = new THREE.Color(0x2ec4c6), accentT = new THREE.Color(0x2ec4c6);
 function applyProduct(id, p) {
   const P = products[id]; if (!P || !p) return;
-  if (id === 'acup') { if (p.lid) { P.lidMat.map = tex(p.lid, 'png'); P.lidMat.needsUpdate = true; } P.creamMat.color.set(p.cream || '#B99B6C'); }
+  if (id === 'acup') { if (p.lid) { P.lidMat.map = tex(p.lid); P.lidMat.needsUpdate = true; } P.creamMat.color.set(p.cream || '#B99B6C'); }
   if (id === 'abar' && p.tex) { P.front.map = tex(p.tex); P.front.needsUpdate = true; P.back.color.set(p.color); }
 }
 window.ABScene = {

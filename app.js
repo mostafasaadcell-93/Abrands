@@ -10,6 +10,7 @@ const WA = String(AB.whatsapp || '').replace(/\D/g, '');   // empty = demo mode 
 const CONTACT = String(AB.contact || '').replace(/\D/g, '');
 const money = n => '$' + (Number.isInteger(n) ? n : n.toFixed(2));
 const img = p => `assets/img/${p.img}.webp`;
+const lc = p => p.lid ? ' class="lid"' : '';   // Acup photos are cut-out lids: shown whole, not cropped
 const IC = {
   plus: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 2.5v11M2.5 8h11"/></svg>',
   minus: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2.5 8h11"/></svg>',
@@ -75,7 +76,7 @@ $('#filters').innerHTML = `<button class="fb" type="button" data-fb="all" aria-p
 function card(p) {
   const b = BR[p.brand], [v, u] = stat(p);
   return `<article class="pc reveal" id="pc-${p.id}" style="--c:${p.color};--ci:${inkOf(p.color)}">
-    <div class="ph"><img src="${img(p)}" alt="${esc(b.name)} ${esc(p.name)}" loading="lazy" width="480" height="480"><button type="button" data-open="${p.id}" aria-label="${esc(p.name)} details"></button>
+    <div class="ph"><img${lc(p)} src="${img(p)}" alt="${esc(b.name)} ${esc(p.name)}" loading="lazy" width="480" height="480"><button type="button" data-open="${p.id}" aria-label="${esc(p.name)} details"></button>
       <div class="badge" aria-hidden="true"><b>${v}</b><small>${u.toUpperCase().replace('G ', '')}</small></div><span class="brand">${esc(b.name)}</span></div>
     <div class="bd"><span class="ln">${esc(p.line)}</span><h3>${esc(p.name)}</h3>
       <div class="ft"><span class="pr">${money(p.price)}<small>${p.unit ? '/ ' + esc(p.unit) : p.size ? esc(p.size) : ''}</small></span><div data-ctl="${p.id}"></div></div></div></article>`;
@@ -123,11 +124,11 @@ story.style.setProperty('--sc', STORY_C[0]);
 /* ================= MIX BOX ================= */
 let mix = [];
 $('#mixN').textContent = AB.box.size; $('#mixOff').textContent = `−${AB.box.off}%`;
-$('#picks').innerHTML = AB.products.map(p => `<button class="pk" type="button" data-pk="${p.id}" aria-label="Add ${esc(BR[p.brand].name)} ${esc(p.name)} to the box"><img src="${img(p)}" alt="">${esc(p.name)}</button>`).join('');
+$('#picks').innerHTML = AB.products.map(p => `<button class="pk" type="button" data-pk="${p.id}" aria-label="Add ${esc(BR[p.brand].name)} ${esc(p.name)} to the box"><img${lc(p)} src="${img(p)}" alt="">${esc(p.name)}</button>`).join('');
 function renderMix(pop = -1) {
   $('#slots').innerHTML = Array.from({ length: AB.box.size }, (_, i) => {
     const p = PR[mix[i]];
-    return p ? `<button type="button" class="slot on" data-sl="${i}" style="--c:${p.color};${i === pop || pop === 'all' ? '' : 'animation:none'}" aria-label="${esc(p.name)}, tap to remove"><img src="${img(p)}" alt=""></button>` : `<span class="slot" aria-hidden="true">${i + 1}</span>`;
+    return p ? `<button type="button" class="slot on" data-sl="${i}" style="--c:${p.color};${i === pop || pop === 'all' ? '' : 'animation:none'}" aria-label="${esc(p.name)}, tap to remove"><img${lc(p)} src="${img(p)}" alt=""></button>` : `<span class="slot" aria-hidden="true">${i + 1}</span>`;
   }).join('');
   const n = mix.length, bp = boxPrice(mix);
   $('#meter').style.width = n / AB.box.size * 100 + '%';
@@ -156,11 +157,13 @@ $('#wsC').innerHTML = AB.countries.map(c => `<option value="${c.id}">${c.flag} $
 function openSheet(id) {
   const p = PR[id], b = BR[p.brand]; let q = 1;
   $('#sheet').style.setProperty('--c', p.color);
-  $('#shPh').innerHTML = `<img src="${img(p)}" alt="${esc(b.name)} ${esc(p.name)}">`;
-  const facts = [stat(p), [esc(b.kind), 'brand line'], p.kcal ? [p.kcal, 'cal / bite'] : [p.unit || 'single', 'size']];
+  $('#shPh').classList.toggle('white', !!p.shot);
+  $('#shPh').innerHTML = p.shot ? `<img class="shot" src="assets/img/${p.shot}.webp" alt="${esc(b.name)} ${esc(p.name)} cup">`
+    : `<img${lc(p)} src="${img(p)}" alt="${esc(b.name)} ${esc(p.name)}">`;
+  const facts = [stat(p), p.size ? [esc(p.size), 'per cup'] : [esc(b.kind), 'brand line'], p.kcal ? [p.kcal, p.brand === 'abites' ? 'cal / bite' : 'calories'] : [esc(p.unit || 'single'), 'size']];
   const draw = () => {
     $('#shBd').innerHTML = `<button class="x" type="button" data-close aria-label="Close">${IC.x}</button><span class="ln">${esc(b.name)} · ${esc(p.line)}</span><h2 id="shN">${esc(p.name)}</h2>
-      <div class="facts">${facts.map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('')}</div><p class="d">${esc(b.pitch)}</p>
+      <div class="facts">${facts.map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('')}</div><p class="d">${p.note ? `<b>${esc(p.note)}.</b> ` : ''}${esc(b.pitch)}</p>
       <div class="sh-act"><div class="step" role="group" aria-label="Quantity"><button type="button" id="sM" aria-label="One less">${IC.minus}</button><output id="sQ">${q}</output><button type="button" id="sP" aria-label="One more">${IC.plus}</button></div>
       <button class="gobtn" type="button" id="sA"><span>Add to order</span><span id="sT">${money(p.price * q)}</span></button></div>`;
     $('#sM').onclick = () => { if (q > 1) { q--; upd(); } }; $('#sP').onclick = () => { if (q < 50) { q++; upd(); } };
@@ -179,8 +182,8 @@ function renderCart() {
   if (!t.n) { view = 'list'; body.innerHTML = `<div class="empty"><b>Empty tank</b>Add something with protein in it 💪</div>`; foot.innerHTML = `<button class="gobtn ghost" type="button" data-close>Browse products</button>`; return; }
   const cty = AB.countries.find(c => c.id === country);
   if (view === 'list') {
-    body.innerHTML = Object.keys(cart).map(id => { const p = PR[id]; return `<div class="line"><img src="${img(p)}" alt=""><div><b>${esc(BR[p.brand].name)} ${esc(p.name)}</b><small>${money(p.price)} each</small></div><div class="step" role="group" aria-label="${esc(p.name)} quantity"><button type="button" data-dec="${id}" aria-label="One less">${IC.minus}</button><output>${cart[id]}</output><button type="button" data-add="${id}" aria-label="One more">${IC.plus}</button></div></div>`; }).join('')
-      + boxes.map((bx, i) => `<div class="line"><img src="${img(PR[bx[0]])}" alt=""><div><b>Mix box #${i + 1}</b><small>${bx.map(id => PR[id].name).join(', ')}</small></div><button class="x" type="button" data-rmbox="${i}" aria-label="Remove mix box">${IC.x}</button></div>`).join('')
+    body.innerHTML = Object.keys(cart).map(id => { const p = PR[id]; return `<div class="line"><img${lc(p)} src="${img(p)}" alt=""><div><b>${esc(BR[p.brand].name)} ${esc(p.name)}</b><small>${money(p.price)} each</small></div><div class="step" role="group" aria-label="${esc(p.name)} quantity"><button type="button" data-dec="${id}" aria-label="One less">${IC.minus}</button><output>${cart[id]}</output><button type="button" data-add="${id}" aria-label="One more">${IC.plus}</button></div></div>`; }).join('')
+      + boxes.map((bx, i) => `<div class="line"><img${lc(PR[bx[0]])} src="${img(PR[bx[0]])}" alt=""><div><b>Mix box #${i + 1}</b><small>${bx.map(id => PR[id].name).join(', ')}</small></div><button class="x" type="button" data-rmbox="${i}" aria-label="Remove mix box">${IC.x}</button></div>`).join('')
       + `<div class="sum"><div><span>Items</span><span>${money(t.items + t.boxFull)}</span></div>${t.save ? `<div class="save"><span>Mix box −${AB.box.off}%</span><span>−${money(t.save)}</span></div>` : ''}
         <div><span>Delivery to</span><span>${cty.flag} ${esc(cty.name)}</span></div><div class="tot"><span>Total</span><span>${money(t.total)}</span></div><p class="note">Delivery fee confirmed on WhatsApp.</p></div>`
       + (boxes.length ? '' : `<div class="nudge">📦 Build a <b>mix box</b> of ${AB.box.size} and save ${AB.box.off}%.</div>`);

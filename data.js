@@ -1,5 +1,6 @@
 /* Abrands catalog. Flavors and protein are read from Abrands' own packaging/posts.
-   PRICES ARE PLACEHOLDERS (marked est:1 in the UI) until Abrands confirms them.
+   PRICES are estimates taken from Lebanese retailers (Everything Sports, WeCare) until Abrands confirms them.
+   Photos: official lid art + packshots from Loubnany / Everything Sports listings; nutrition from the printed labels.
    Keep the AB-CONFIG markers: a future owner panel can read and rewrite everything between them. */
 window.AB = /*AB-CONFIG-START*/{
  "whatsapp": "",
@@ -44,8 +45,8 @@ window.AB = /*AB-CONFIG-START*/{
    "id": "acup",
    "name": "Acup",
    "kind": "Protein cups",
-   "line": "Boost · Gain · Recover",
-   "pitch": "Thick protein cream on a crunchy base. Spoon inside.",
+   "line": "Protein Bomb · Booster · Oriental · Super Charge · Junior",
+   "pitch": "Thick protein cream on a crunchy base, spoon inside. From 10 g (Junior) to 40 g (Protein Bomb) protein.",
    "color": "#2EC4C6",
    "ink": "#06292A"
   },
@@ -53,8 +54,8 @@ window.AB = /*AB-CONFIG-START*/{
    "id": "abar",
    "name": "Abar",
    "kind": "Pro Bars",
-   "line": "33% protein",
-   "pitch": "Whey protein bars. No refined sugar, rich in potassium.",
+   "line": "18 g protein · 33%",
+   "pitch": "Whey protein bars. No refined sugar, rich in fiber & potassium.",
    "color": "#C88A4A",
    "ink": "#2A1708"
   },
@@ -84,15 +85,18 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Protein Bomb",
    "name": "Trio",
    "p": 40,
-   "price": 3.5,
+   "size": "125 g",
+   "price": 3.9,
    "img": "p-trio",
    "lid": "lid-trio",
+   "color": "#3F4A7A",
    "cream": "#B99B6C",
-   "color": "#5B57C9",
    "tags": [
     "chocolate",
     "sweet"
    ],
+   "kcal": 580,
+   "shot": "s-trio",
    "note": "Cookie, strawberry & chocolate"
   },
   {
@@ -102,14 +106,16 @@ window.AB = /*AB-CONFIG-START*/{
    "name": "Invasion",
    "p": 40,
    "size": "125 g",
-   "price": 4.5,
+   "price": 3.9,
    "img": "p-invasion",
-   "color": "#3FA34D",
+   "lid": "lid-invasion",
+   "color": "#1F5A36",
+   "cream": "#6E4A33",
    "tags": [
-    "sweet"
+    "chocolate"
    ],
-   "photoPending": true,
-   "note": "Big 125 g cup"
+   "kcal": 580,
+   "shot": "s-invasion",
   },
   {
    "id": "acup-mango",
@@ -117,13 +123,15 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Protein Bomb",
    "name": "Mango Passion",
    "p": 40,
-   "price": 3.5,
+   "size": "125 g",
+   "price": 3.9,
    "img": "p-mango",
+   "lid": "lid-mango",
    "color": "#F6A21A",
+   "cream": "#E1B25A",
    "tags": [
     "fruity"
-   ],
-   "cream": "#E1B25A"
+   ]
   },
   {
    "id": "acup-birthday",
@@ -131,13 +139,15 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Protein Bomb",
    "name": "Birthday Cake",
    "p": 40,
-   "price": 3.5,
+   "size": "125 g",
+   "price": 3.9,
    "img": "p-birthday",
+   "lid": "lid-birthday",
    "color": "#F0567A",
+   "cream": "#E9D5C0",
    "tags": [
     "sweet"
-   ],
-   "cream": "#E9D5C0"
+   ]
   },
   {
    "id": "acup-cinnamon",
@@ -145,13 +155,15 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Protein Bomb",
    "name": "Cinnamon Roll",
    "p": 40,
-   "price": 3.5,
+   "size": "125 g",
+   "price": 3.9,
    "img": "p-cinnamon",
+   "lid": "lid-cinnamon",
    "color": "#C9792F",
+   "cream": "#C49A68",
    "tags": [
     "sweet"
-   ],
-   "cream": "#C49A68"
+   ]
   },
   {
    "id": "acup-coffee",
@@ -159,14 +171,32 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Booster",
    "name": "Coffee Dream",
    "p": 25,
-   "price": 3,
+   "size": "80 g",
+   "price": 2.6,
    "img": "p-coffee",
    "lid": "lid-coffee",
    "color": "#F08A1C",
+   "cream": "#9C7650",
    "tags": [
     "coffee"
-   ],
-   "cream": "#9C7650"
+   ]
+  },
+  {
+   "id": "acup-cookies",
+   "brand": "acup",
+   "line": "Booster",
+   "name": "Cookies & Cream",
+   "p": 25,
+   "size": "80 g",
+   "price": 2.6,
+   "img": "p-cookies",
+   "lid": "lid-cookies",
+   "color": "#D9A066",
+   "cream": "#8E7B6A",
+   "tags": [
+    "chocolate",
+    "sweet"
+   ]
   },
   {
    "id": "acup-double",
@@ -174,13 +204,69 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Booster",
    "name": "Double Chocolate",
    "p": 25,
-   "price": 3,
+   "size": "80 g",
+   "price": 2.6,
    "img": "p-double",
+   "lid": "lid-double",
    "color": "#6B3A2A",
+   "cream": "#6E4A33",
    "tags": [
     "chocolate"
    ],
-   "cream": "#6E4A33"
+   "kcal": 370,
+   "shot": "s-double"
+  },
+  {
+   "id": "acup-redberries",
+   "brand": "acup",
+   "line": "Booster",
+   "name": "Red Berries",
+   "p": 25,
+   "size": "80 g",
+   "price": 2.6,
+   "img": "p-redberries",
+   "lid": "lid-redberries",
+   "color": "#D3202F",
+   "cream": "#C9878A",
+   "tags": [
+    "fruity"
+   ],
+   "shot": "s-redberries"
+  },
+  {
+   "id": "acup-vanilladates",
+   "brand": "acup",
+   "line": "Booster",
+   "name": "Vanilla Dates",
+   "p": 25,
+   "size": "80 g",
+   "price": 2.6,
+   "img": "p-vanilladates",
+   "lid": "lid-vanilladates",
+   "color": "#7A1E2A",
+   "cream": "#D8C29A",
+   "tags": [
+    "sweet",
+    "oriental"
+   ]
+  },
+  {
+   "id": "acup-vanillaice",
+   "brand": "acup",
+   "line": "Booster",
+   "name": "Vanilla Ice Cream",
+   "p": 25,
+   "size": "80 g",
+   "price": 2.6,
+   "img": "p-vanillaice",
+   "lid": "lid-vanillaice",
+   "color": "#E3B98A",
+   "cream": "#EADBC0",
+   "tags": [
+    "sweet"
+   ],
+   "kcal": 370,
+   "shot": "s-vanillaice"
   },
   {
    "id": "acup-kunafa",
@@ -188,14 +274,15 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Oriental",
    "name": "Kunafa",
    "p": 25,
-   "price": 3,
+   "size": "80 g",
+   "price": 2.6,
    "img": "p-kunafa",
    "lid": "lid-kunafa",
    "color": "#1E9C86",
+   "cream": "#DCC596",
    "tags": [
     "oriental"
-   ],
-   "cream": "#DCC596"
+   ]
   },
   {
    "id": "acup-dubai",
@@ -203,15 +290,16 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Oriental",
    "name": "Dubai Treat",
    "p": 25,
-   "price": 3,
+   "size": "80 g",
+   "price": 2.6,
    "img": "p-dubai",
    "lid": "lid-dubai",
    "color": "#8DC34A",
+   "cream": "#A9A66A",
    "tags": [
     "oriental",
     "chocolate"
-   ],
-   "cream": "#A9A66A"
+   ]
   },
   {
    "id": "acup-honey",
@@ -219,28 +307,86 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Oriental",
    "name": "Sindyan Honey",
    "p": 25,
-   "price": 3,
+   "size": "80 g",
+   "price": 2.6,
    "img": "p-honey",
+   "lid": "lid-honey",
    "color": "#F2B230",
+   "cream": "#D9B572",
    "tags": [
     "oriental"
-   ],
-   "cream": "#D9B572"
+   ]
   },
   {
    "id": "acup-crispy",
    "brand": "acup",
-   "line": "Super Crispy",
+   "line": "Super Charge",
    "name": "Crispy Chocolate",
    "p": 15,
-   "price": 2.5,
+   "size": "66 g",
+   "price": 2.0,
    "img": "p-crispy",
+   "lid": "lid-crispy",
    "color": "#3CC4C9",
+   "cream": "#8C6448",
    "tags": [
     "chocolate",
     "light"
+   ]
+  },
+  {
+   "id": "acup-cheesecake",
+   "brand": "acup",
+   "line": "Super Charge",
+   "name": "Cheesecake",
+   "p": 15,
+   "size": "66 g",
+   "price": 2.0,
+   "img": "p-cheesecake",
+   "lid": "lid-cheesecake",
+   "color": "#F26B6B",
+   "cream": "#E9D3B0",
+   "tags": [
+    "fruity",
+    "light"
    ],
-   "cream": "#8C6448"
+   "kcal": 300,
+   "shot": "s-cheesecake"
+  },
+  {
+   "id": "acup-vanillamarvel",
+   "brand": "acup",
+   "line": "Super Charge",
+   "name": "Vanilla Marvel",
+   "p": 15,
+   "size": "66 g",
+   "price": 2.0,
+   "img": "p-vanillamarvel",
+   "lid": "lid-vanillamarvel",
+   "color": "#F0B323",
+   "cream": "#EBD9A8",
+   "tags": [
+    "sweet",
+    "light"
+   ]
+  },
+  {
+   "id": "acup-cerealdelight",
+   "brand": "acup",
+   "line": "Junior",
+   "name": "Cereal Delight",
+   "p": 10,
+   "size": "60 g",
+   "price": 1.75,
+   "img": "p-cerealdelight",
+   "lid": "lid-cerealdelight",
+   "color": "#9DB6E6",
+   "cream": "#E2CFA0",
+   "tags": [
+    "light",
+    "sweet"
+   ],
+   "kcal": 280
   },
   {
    "id": "abar-dark",
@@ -248,13 +394,15 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Pro Bar",
    "name": "Dark Chocolate",
    "pct": 33,
-   "price": 2.5,
+   "price": 2.25,
    "img": "p-bar-dark",
    "tex": "tex-bar-dark",
    "color": "#4A2A1C",
    "tags": [
     "chocolate"
-   ]
+   ],
+   "p": 18,
+   "unit": "bar"
   },
   {
    "id": "abar-caramel",
@@ -262,27 +410,31 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Pro Bar",
    "name": "Salted Caramel",
    "pct": 33,
-   "price": 2.5,
+   "price": 2.25,
    "img": "p-bar-caramel",
    "tex": "tex-bar-caramel",
    "color": "#D9822B",
    "tags": [
     "sweet"
-   ]
+   ],
+   "p": 18,
+   "unit": "bar"
   },
   {
    "id": "abar-cheesecake",
    "brand": "abar",
    "line": "Pro Bar",
-   "name": "Cheesecake",
+   "name": "Strawberry Cheesecake",
    "pct": 33,
-   "price": 2.5,
+   "price": 2.25,
    "img": "p-bar-cheesecake",
    "tex": "tex-bar-cheesecake",
    "color": "#D4365A",
    "tags": [
     "fruity"
-   ]
+   ],
+   "p": 18,
+   "unit": "bar"
   },
   {
    "id": "abar-vanilla",
@@ -290,13 +442,15 @@ window.AB = /*AB-CONFIG-START*/{
    "line": "Pro Bar",
    "name": "Vanilla",
    "pct": 33,
-   "price": 2.5,
+   "price": 2.25,
    "img": "p-bar-vanilla",
    "tex": "tex-bar-vanilla",
    "color": "#E8D4AE",
    "tags": [
     "sweet"
-   ]
+   ],
+   "p": 18,
+   "unit": "bar"
   },
   {
    "id": "abites-choco",
@@ -306,7 +460,7 @@ window.AB = /*AB-CONFIG-START*/{
    "p": 28,
    "kcal": 90,
    "unit": "box of 4",
-   "price": 4,
+   "price": 3.35,
    "img": "p-bites-choco",
    "color": "#5A3324",
    "tags": [
@@ -322,7 +476,7 @@ window.AB = /*AB-CONFIG-START*/{
    "p": 24,
    "kcal": 90,
    "unit": "box of 4",
-   "price": 4,
+   "price": 3.35,
    "img": "p-bites-honey",
    "color": "#B3202C",
    "tags": [
