@@ -50,21 +50,13 @@ a{color:inherit}
 /* intro: 4 brand panels rise → Acup lids burst around the logo → lids fly out, page wipes in (~3.3 s, tap to skip) */
 .intro{position:fixed;inset:0;z-index:400;overflow:hidden;background:#050506;cursor:pointer;transition:clip-path .9s var(--ease),visibility 0s linear 1s;clip-path:inset(0 0 0 0)}
 .intro.out{clip-path:inset(0 0 100% 0);visibility:hidden}
-.i-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr)}
-.i-col{position:relative;overflow:hidden;background:var(--c);clip-path:inset(100% 0 0 0)}
-.i-col img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.35)}
-.i-col img.lid{inset:auto;left:50%;top:44%;width:min(88%,330px);height:auto;object-fit:contain;transform:translate(-50%,-50%) rotate(-120deg) scale(.5);filter:drop-shadow(0 24px 30px rgba(0,0,0,.45))}
-.i-col::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,color-mix(in srgb,var(--c) 92%,#000) 6%,transparent 52%)}
-.i-col b{position:absolute;left:0;right:0;bottom:5%;z-index:1;text-align:center;font-family:var(--disp);font-weight:400;font-size:clamp(30px,6.4vw,104px);line-height:.9;text-transform:uppercase;color:var(--ci);transform:translateY(120%)}
-.go .i-col{animation:iColIn .6s var(--ease) calc(var(--d)*.09s) forwards,iColOut .5s cubic-bezier(.7,0,.84,0) calc(1.3s + var(--d)*.06s) forwards}
-.go .i-col img{animation:iZoom 1.9s var(--ease) calc(var(--d)*.09s) forwards}
-.go .i-col img.lid{animation:iSpin 1.5s var(--ease) calc(var(--d)*.09s) forwards}
-.go .i-col b{animation:iUp .6s var(--ease) calc(.22s + var(--d)*.09s) forwards}
-@keyframes iColIn{to{clip-path:inset(0 0 0 0)}}
-@keyframes iColOut{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
-@keyframes iZoom{to{transform:scale(1.05)}}
-@keyframes iSpin{to{transform:translate(-50%,-50%) rotate(0) scale(1)}}
-@keyframes iUp{to{transform:none}}
+.i-words{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.i-words b{grid-area:1/1;font-family:var(--disp);font-weight:400;font-size:clamp(84px,19vw,240px);line-height:.85;text-transform:uppercase;letter-spacing:.01em;color:var(--c);opacity:0}
+.go .i-words b{animation:iWord .4s var(--ease) calc(.08s + var(--d)*.3s) both}
+@keyframes iWord{0%{opacity:0;transform:translateY(35%) scale(1.25);filter:blur(8px)}22%{opacity:1;transform:none;filter:none}72%{opacity:1;transform:none;filter:none}100%{opacity:0;transform:translateY(-25%) scale(.92);filter:blur(6px)}}
+.i-words small{grid-area:1/1;align-self:end;margin-bottom:max(70px,14vh);font-weight:800;font-style:italic;font-size:clamp(11px,1.5vw,15px);letter-spacing:.45em;color:var(--mut);opacity:0}
+.go .i-words small{animation:iSub 1.3s linear .05s both}
+@keyframes iSub{0%,100%{opacity:0}15%,80%{opacity:1}}
 .i-burst{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;--rx:min(41vw,560px);--ry:min(31vh,290px)}
 .i-burst img{grid-area:1/1;width:clamp(78px,12.5vw,170px);opacity:0;filter:drop-shadow(0 18px 24px rgba(0,0,0,.6))}
 .go .i-burst img{animation:iBurst 1.25s var(--ease) calc(1.42s + var(--i)*.035s) forwards,iFly .55s cubic-bezier(.7,0,.84,0) 2.78s forwards}
@@ -81,9 +73,7 @@ a{color:inherit}
 .go .tag{animation:fade .5s 2.05s forwards}
 .intro .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--red);width:0;animation:load 3.2s linear .1s forwards}
 .i-skip{position:absolute;right:var(--gut);bottom:22px;z-index:2;font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);opacity:0;animation:fade .4s .5s forwards}
-@media (max-width:700px){.i-col b{writing-mode:vertical-rl;transform:rotate(180deg) translateY(-120%);left:50%;right:auto;bottom:4%;margin-left:-.5em;font-size:clamp(40px,12vw,64px)}
-  @keyframes iUp{to{transform:rotate(180deg)}}
-  .i-col img.lid{top:36%;width:88%}.i-burst{--rx:40vw;--ry:30vh}.i-burst img:nth-child(4n+3){display:none}}
+@media (max-width:700px){.i-burst{--rx:40vw;--ry:30vh}.i-burst img:nth-child(4n+3){display:none}}
 @keyframes slam{to{opacity:1;transform:none;filter:none}}
 @keyframes fade{to{opacity:1}}
 @keyframes load{to{width:100%}}
@@ -432,7 +422,7 @@ body.menu-on{overflow:hidden}
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
-<div class="intro" id="intro" aria-hidden="true"><div class="i-cols"><div class="i-col" style="--c:#2EC4C6;--ci:#06292A;--d:0"><img class="lid" src="assets/img/p-trio.webp" alt=""><b>Acup</b></div><div class="i-col" style="--c:#C88A4A;--ci:#2A1708;--d:1"><img src="assets/img/p-bar-dark.webp" alt=""><b>Abar</b></div><div class="i-col" style="--c:#B3202C;--ci:#FFF4E8;--d:2"><img src="assets/img/p-bites-choco.webp" alt=""><b>Abites</b></div><div class="i-col" style="--c:#4FB3E8;--ci:#06223A;--d:3"><img src="assets/img/p-butter.webp" alt=""><b>Abutter</b></div></div><div class="i-burst"><img src="assets/img/p-trio.webp" alt="" style="--i:0;--x:0.000;--y:-1.000"><img src="assets/img/p-invasion.webp" alt="" style="--i:1;--x:0.707;--y:-0.707"><img src="assets/img/p-redberries.webp" alt="" style="--i:2;--x:1.000;--y:0.000"><img src="assets/img/p-coffee.webp" alt="" style="--i:3;--x:0.707;--y:0.707"><img src="assets/img/p-cerealdelight.webp" alt="" style="--i:4;--x:0.000;--y:1.000"><img src="assets/img/p-cheesecake.webp" alt="" style="--i:5;--x:-0.707;--y:0.707"><img src="assets/img/p-vanillamarvel.webp" alt="" style="--i:6;--x:-1.000;--y:0.000"><img src="assets/img/p-cookies.webp" alt="" style="--i:7;--x:-0.707;--y:-0.707"></div><div class="i-logo"><div><div class="lg"><span style="--i:0">A</span><span style="--i:1">B</span><span style="--i:2">R</span><span style="--i:3">A</span><span style="--i:4">N</span><span style="--i:5">D</span><span style="--i:6">S</span></div><span class="tag">BOOST • GAIN • RECOVER</span></div></div><span class="i-skip">Tap to skip</span><div class="bar"></div></div>
+<div class="intro" id="intro" aria-hidden="true"><div class="i-words"><b style="--c:#2EC4C6;--d:0">Acup</b><b style="--c:#C88A4A;--d:1">Abar</b><b style="--c:#E5333F;--d:2">Abites</b><b style="--c:#4FB3E8;--d:3">Abutter</b><small>4 BRANDS · 1 MISSION</small></div><div class="i-burst"><img src="assets/img/p-trio.webp" alt="" style="--i:0;--x:0.000;--y:-1.000"><img src="assets/img/p-invasion.webp" alt="" style="--i:1;--x:0.707;--y:-0.707"><img src="assets/img/p-redberries.webp" alt="" style="--i:2;--x:1.000;--y:0.000"><img src="assets/img/p-coffee.webp" alt="" style="--i:3;--x:0.707;--y:0.707"><img src="assets/img/p-cerealdelight.webp" alt="" style="--i:4;--x:0.000;--y:1.000"><img src="assets/img/p-cheesecake.webp" alt="" style="--i:5;--x:-0.707;--y:0.707"><img src="assets/img/p-vanillamarvel.webp" alt="" style="--i:6;--x:-1.000;--y:0.000"><img src="assets/img/p-cookies.webp" alt="" style="--i:7;--x:-0.707;--y:-0.707"></div><div class="i-logo"><div><div class="lg"><span style="--i:0">A</span><span style="--i:1">B</span><span style="--i:2">R</span><span style="--i:3">A</span><span style="--i:4">N</span><span style="--i:5">D</span><span style="--i:6">S</span></div><span class="tag">BOOST • GAIN • RECOVER</span></div></div><span class="i-skip">Tap to skip</span><div class="bar"></div></div>
 
 <header class="hd" id="hd">
   <a class="wm" href="#top" aria-label="Abrands home">ABRANDS<small>BOOST • GAIN • RECOVER</small></a>
