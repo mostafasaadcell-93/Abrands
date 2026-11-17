@@ -235,9 +235,10 @@ function place(e) {
   const lines = Object.keys(cart).map(id => `• ${cart[id]} × ${BR[PR[id].brand].name} ${PR[id].name} (${money(PR[id].price * cart[id])})`)
     .concat(boxes.map((b, i) => `• Mix box #${i + 1} (${money(boxPrice(b).price)}): ${b.map(id => PR[id].name).join(', ')}`));
   const txt = `*New Abrands order* ${no}\n\n${lines.join('\n')}\n\n${t.save ? `Mix box saving: −${money(t.save)}\n` : ''}*Total: ${money(t.total)}* (+ delivery)\n\n👤 ${form.name.trim()}\n📞 ${form.phone.trim()}\n${cty.flag} ${cty.name} · ${form.address.trim()}${form.notes.trim() ? '\n📝 ' + form.notes.trim() : ''}`;
-  if (WA) { const u = `https://wa.me/${WA}?text=${encodeURIComponent(txt)}`, w = window.open(u, '_blank'); if (w) w.opener = null; else location.href = u; }
+  const u = WA ? `https://wa.me/${WA}?text=${encodeURIComponent(txt)}` : '';
+  if (u) { const w = window.open(u, '_blank'); if (w) w.opener = null; else location.href = u; }   // popup blocked (e.g. Instagram in-app browser): go there directly
   view = 'done';
-  $('#cartBody').innerHTML = `<div class="done"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/><path pathLength="1" d="M30 52l13 13 27-29"/></svg><h3>Order locked in</h3><p>Order <b>${no}</b>, ${money(t.total)}. ${WA ? 'Just tap Send in WhatsApp.' : ''}</p>${WA ? '' : '<div class="demo">Demo mode: this order was not sent to Abrands.</div>'}</div>`;
+  $('#cartBody').innerHTML = `<div class="done"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/><path pathLength="1" d="M30 52l13 13 27-29"/></svg><h3>Order locked in</h3><p>Order <b>${no}</b>, ${money(t.total)}. ${u ? 'Just tap Send in WhatsApp.' : ''}</p>${u ? `<a class="again" href="${u}" target="_blank" rel="noopener">WhatsApp didn't open? Tap here</a>` : '<div class="demo">Demo mode: this order was not sent to Abrands.</div>'}</div>`;
   $('#cartFoot').innerHTML = `<button class="gobtn" type="button" id="nO"><span>Done</span><span>✓</span></button>`;
   cart = {}; boxes = []; save(); AB.products.forEach(p => renderCtl(p.id)); counts();
   $('#nO').onclick = () => { view = 'list'; closeAll(); };

@@ -3,7 +3,7 @@
    Photos: official lid art + packshots from Loubnany / Everything Sports listings; nutrition from the printed labels.
    Keep the AB-CONFIG markers: a future owner panel can read and rewrite everything between them. */
 window.AB = /*AB-CONFIG-START*/{
- "whatsapp": "",
+ "whatsapp": "9617189537",
  "contact": "9617189537",
  "instagram": "https://www.instagram.com/abrands_int/",
  "currency": "USD",
