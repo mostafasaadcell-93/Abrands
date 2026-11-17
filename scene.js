@@ -210,6 +210,7 @@ function applyProduct(id, p) {
   if (id === 'abar' && p.tex) { P.front.map = tex(p.tex); P.front.needsUpdate = true; P.back.color.set(p.color); }
 }
 window.ABScene = {
+  replayIntro() { t0 = performance.now(); },
   show(id, p, color) {
     if (color) accentT.set(color);
     if (!cur) { cur = id; products[id].g.visible = true; applyProduct(id, p); return; }
@@ -230,7 +231,7 @@ host.addEventListener('pointerup', up); host.addEventListener('pointercancel', u
 addEventListener('pointermove', e => { px = e.clientX / innerWidth * 2 - 1; py = e.clientY / innerHeight * 2 - 1; }, { passive: true });
 
 /* ---------- loop ---------- */
-let visible = true, raf = 0, last = performance.now(); const t0 = last; let tx = 0, ty = 0;
+let visible = true, raf = 0, last = performance.now(); let t0 = last; let tx = 0, ty = 0;
 new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }).observe(host);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && visible && !raf) { last = performance.now(); raf = requestAnimationFrame(tick); } });
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;

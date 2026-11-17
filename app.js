@@ -278,9 +278,19 @@ const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersectin
 $$('.reveal').forEach(el => rio.observe(el));
 addEventListener('scroll', () => { $('#hd').classList.toggle('solid', scrollY > 30); storyTick(); }, { passive: true });
 (function intro() {
-  const el = $('#intro'); let seen = false;
+  const el = $('#intro'); let seen = false, done = false;
   try { seen = sessionStorage.getItem('ab-intro') === '1'; sessionStorage.setItem('ab-intro', '1'); } catch (e) {}
+  const finish = () => {
+    if (done) return; done = true;
+    el.classList.add('out'); document.documentElement.classList.add('ready');
+    window.ABScene?.replayIntro?.(); setTimeout(() => el.remove(), 1100);
+  };
   if (seen || reduce) { el.remove(); document.documentElement.classList.add('ready'); return; }
-  setTimeout(() => { el.classList.add('out'); document.documentElement.classList.add('ready'); setTimeout(() => el.remove(), 1300); }, 1600);
+  // start once the product photos are decoded (or after 1.2 s on a slow connection), then run ~3.3 s
+  const imgs = $$('img', el), wait = Promise.all(imgs.map(i => i.decode().catch(() => {})));
+  Promise.race([wait, new Promise(r => setTimeout(r, 1200))]).then(() => { if (!done) { el.classList.add('go'); setTimeout(finish, 3050); } });
+  el.addEventListener('click', finish);
+  addEventListener('keydown', finish, { once: true });
+  setTimeout(finish, 6000);   // safety net
 })();
 counts(); storyTick();
