@@ -1,0 +1,27 @@
+name: fetch-photos
+on:
+  push:
+    branches: [photo-fetch]
+    paths: ['_fetch/urls.txt']
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        run: |
+          mkdir -p _fetch/out
+          while read -r name url; do
+            [ -z "$name" ] && continue
+            curl -sSL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36" -m 60 -o "_fetch/out/$name" "$url" || echo "FAIL $name" >> _fetch/out/_failed.txt
+          done < _fetch/urls.txt
+          ls -la _fetch/out
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add _fetch/out
+          git commit -m "Fetched photos" || true
+          git push
